@@ -19,10 +19,19 @@ async function startBot() {
     }
 
     try {
-        botUser = await noblox.setCookie(ROBLOSECURITY);
-        console.log(`✅ Bot Roblox connecté en tant que : ${botUser.UserName} (ID: ${botUser.UserID})`);
+        // Connexion initiale avec le cookie
+        await noblox.setCookie(ROBLOSECURITY);
+        
+        // On force la récupération des infos de l'utilisateur pour être sûr à 100%
+        botUser = await noblox.getCurrentUser();
+        
+        if (botUser) {
+            console.log(`✅ Bot Roblox connecté avec succès ! Pseudo : ${botUser.UserName} (ID: ${botUser.UserID})`);
+        } else {
+            console.error("❌ Impossible de charger les informations de l'utilisateur.");
+        }
     } catch (err) {
-        console.error("❌ Échec de connexion au bot Roblox :", err.message);
+        console.error("❌ Échec de connexion au bot Roblox (Cookie invalide ou expiré) :", err.message);
     }
 }
 
